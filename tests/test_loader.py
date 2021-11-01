@@ -1,7 +1,7 @@
 from pathlib import Path
 import numpy as np
 import numpy.testing as nt
-from dataeng import Loader, location_type, load_header_url, load_header_file
+from dataeng import Extractor, location_type, load_header_url, load_header_file
 
 
 # Some base data to compare in the tests
@@ -18,12 +18,12 @@ URL_CSV2 = "https://nyc-tlc.s3.amazonaws.com/trip+data/yellow_tripdata_2020-01.c
 
 
 def test_load_local_csvs():
-    Loader(CSV1)
-    Loader(CSV2)
+    Extractor(CSV1)
+    Extractor(CSV2)
 
 def test_retrieve_trip_distance_column():
-    result1 = Loader(CSV1, columns=["trip_distance"]).data
-    result2 = Loader(CSV2, columns=["trip_distance"]).data
+    result1 = Extractor(CSV1, check_columns=["trip_distance"]).data
+    result2 = Extractor(CSV2, check_columns=["trip_distance"]).data
     nt.assert_array_equal(result1["trip_distance"], DIST1)
     nt.assert_array_equal(result2["trip_distance"], DIST2)
 

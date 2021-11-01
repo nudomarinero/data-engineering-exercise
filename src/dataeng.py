@@ -1,53 +1,62 @@
 import json
+import logging
 from pathlib import Path
 from io import StringIO, BytesIO
 from astropy.table import Table
+from astropy.io.ascii import InconsistentTableError
 import click
 import numpy as np
 import requests
 from validators import url
 
 
-class Loader:
-    """Class to load the csv data"""
+logging.basicConfig(
+    level=logging.DEBUG, 
+    format='%(asctime)s | %(name)s | %(levelname)s | %(message)s'
+)
+log = logging.getLogger(__name__)
+
+class Extractor:
+    """Class to perform some validation, and load the CSV in memory. It can also "extract" the data if an URL is provided.
+    """
     
-    def __init__(self, location, columns=None, lazy=False):
+    def __init__(self, location, check_columns=None, lazy=False):
         """Get the csv (dirty) data in memory and perform some validation"""
-        self.columns = columns
+        self.check_columns = check_columns
         self.location_type = location_type(str(location))
         self.location = location
 
         # Initial validation and load of header
+        log.debug(f"Load header of {self.location}")
         self._load_head()
         if self.header is None:
-            raise ValueError("File or URL cannot be loaded")
+            log.error("File or URL cannot be found")
+            raise ValueError("File or URL cannot be found")
         
         # Get columns and verify
+        log.debug(f"Verify that the columns are in the header")
         self.header_columns = (e.strip() for e in self.header.split(","))
-        if columns is not None:
-            for column in columns:
+        if check_columns is not None:
+            for column in check_columns:
                 if column not in self.header_columns:
-                    raise ValueError(f"Column {column} cannot be found in the CSV header")
+                    log.warn(f"Column {column} is not in the header")
         
         # Actually load data
         if not lazy:
             self.load_data()
         
     def load_data(self):
-        """Load data in the most efficient way"""
-        # Configuration of the data reader
-        kargs_read = {"format": 'ascii.csv'}
-        if self.columns is not None:
-            kargs_read.update({"include_names": self.columns})
+        """Load data into table in memory"""
         # Actually load the data
-        if self.location_type == "url":
-            self.data = Table.read(
-                    BytesIO(requests.get(self.location, allow_redirects=True).content), 
-                    **kargs_read
-                )
-        elif self.location_type == "file":
-            self.data = Table.read(self.location, **kargs_read)
+        if self.location_type in ["url", "file"]:
+            log.info("Start data loading")
+            try:
+                self.data = Table.read(self.location, format='ascii.csv')
+            except InconsistentTableError as e:
+                log.error(f"Error loading CSV data: {repr(e)}")
+                self.data = None
         else:
+            log.warn(f"Data cannot be loaded from {self.location}")
             self.data = None
 
     def _load_head(self):
@@ -99,10 +108,11 @@ def compute_quantile(data_column, quantile=0.9):
 @click.argument("filename")
 def cli(filename):
     try:
-        data = Loader(filename, columns=["trip_distance"]).data["trip_distance"]
-        result = compute_quantile(data)
-        output = {"status": "OK", "result": result}
-        print(json.dumps(output))
+        data = Extractor(filename, check_columns=["trip_distance"]).data
+        result = compute_quantile(data["trip_distance"])
+        csv_out = StringIO()
+        data[data["trip_distance"] >= result].write(csv_out, format='csv')
+        output = {"status": "OK", "result": result, "data": csv_out.getvalue()}
     except Exception as e:
         output = {"status": "failed", "exception": repr(e)}
     print(json.dumps(output))
