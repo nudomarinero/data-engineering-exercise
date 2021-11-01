@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "data-engineer-test"
+version = "0.1.0"
+description = "Data Engineer test for Tinybird 2021"
+authors = ["Jose Sabater <jsm@jsabater.info>"]
+license = "MIT"
+
+packages = [
+    { include = "dataeng.py", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.11"
+numpy = "^1.21.3"
+validators = "^0.18.2"
+requests = "^2.26.0"
+astropy = "^4.3.1"
+click = "^8.0.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+tox = "^3.24.4"
+psrecord = "^1.2"
+
+[tool.poetry.scripts]
+compute_yellow = "dataeng:cli"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
