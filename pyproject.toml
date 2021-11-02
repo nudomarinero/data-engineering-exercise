@@ -22,6 +22,8 @@ pytest = "^6.2.5"
 tox = "^3.24.4"
 psrecord = "^1.2"
 matplotlib = "^3.4.3"
+coverage = "^6.1.1"
+pytest-cov = "^3.0.0"
 
 [tool.poetry.scripts]
 compute_yellow = "dataeng:cli"
