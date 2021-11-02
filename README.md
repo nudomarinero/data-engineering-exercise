@@ -1,6 +1,6 @@
 # Data Engineering Exercise
 
-![Tests status](https://github.com/nudomarinero/data-engineering-exercise/actions/workflows/tests.yml/badge.svg)
+![Tests](https://github.com/nudomarinero/data-engineering-exercise/actions/workflows/tests.yml/badge.svg)
 
 Data Engineering Exercise
 
