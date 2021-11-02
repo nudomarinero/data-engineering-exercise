@@ -6,6 +6,7 @@ The other big performance penalty comes in terms of developer time with respect 
 
 ## Extraction step
 
-If some columns are known to not to be useful they can be ignored by the process that loads them into memory. 
+If some columns are known to not to be useful they can be ignored by the process that loads them into memory. In some tests the performance increased by up to 100% if the number of columns was limited to a pair of them (useful only in a few specific cases).
 
-In some tests the performance increased by up to 100% if the number of columns was limited to a pair of them (useful only in a few specific cases)
+In the current implementation we are working directly with the data in memory. If the data is loaded straight away into memory from the URL, we can omit the use of intermediate memory or disk space. Apart from the improvement on memory usage, there is an improvement in run time of several seconds by omitting the intermediate saving of data.
+
