@@ -1,7 +1,8 @@
+from io import StringIO
 import json
 import logging
 from pathlib import Path
-from io import StringIO, BytesIO
+import sys
 from astropy.table import Table
 from astropy.io.ascii import InconsistentTableError
 import click
@@ -101,7 +102,10 @@ def location_type(location):
 
 
 def compute_quantile(data_column, quantile=0.9):
-    return np.quantile(data_column, quantile)
+    log.debug(f"Start compute quantile {quantile}")
+    q = np.quantile(data_column, quantile)
+    log.debug(f"Quantile result for column: {q}")
+    return q
 
 
 @click.command()
@@ -110,9 +114,11 @@ def cli(filename):
     try:
         data = Extractor(filename, check_columns=["trip_distance"]).data
         result = compute_quantile(data["trip_distance"])
-        csv_out = StringIO()
-        data[data["trip_distance"] >= result].write(csv_out, format='csv')
-        output = {"status": "OK", "result": result, "data": csv_out.getvalue()}
+        log.info("Status: OK")
+        data[data["trip_distance"] >= result].write(sys.stdout, format='csv')
+        
     except Exception as e:
-        output = {"status": "failed", "exception": repr(e)}
-    print(json.dumps(output))
+        log.info("Status: Failed")
+        log.info(f"Exception: {repr(e)}")
+        raise e
+
