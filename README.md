@@ -77,16 +77,21 @@ The tests can be run with:
 poetry run pytest
 ```
 
+To run the optional long end-to-end tests that require downloading data from the Internet:
+```bash
+poetry run pytest -m 'webtest'
+```
+
 The tests are also run as part of the CI framework based on Github Actions. It currently runs the tests with the versions 3.7, 3.8, 3.9, and 3.10 of Python.
 
 The test suite can also be run locally in different versions of Python using [`tox`](https://tox.wiki/en/latest/index.html). Just edit the `tox.ini` file to include the versions of Python that you would like to test the pipeline on. Note that the Python versions included must be available in your system. One useful way to install them isolated from the system version is to use [pyenv](https://github.com/pyenv/pyenv).
 
 To profile the CPU and memory usage of the pipeline, we can use [psrecord](https://github.com/astrofrog/psrecord) which is installed by default as part of the development dependencies. For example:
 ```bash
-poetry run psrecord "poetry run compute_yellow tests/data/yellow_tripdata_2020-01.csv" \
+poetry run psrecord "poetry run compute_yellow tests/data/yellow_tripdata_2020-01-small.csv" \
  --log activity.txt
 # the following command will produce a plot
-poetry run psrecord "poetry run compute_yellow tests/data/yellow_tripdata_2020-01.csv" \
+poetry run psrecord "poetry run compute_yellow tests/data/yellow_tripdata_2020-01-small.csv" \
  --plot plot.png
 ```
 

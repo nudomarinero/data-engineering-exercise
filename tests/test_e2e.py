@@ -32,7 +32,7 @@ def test_similar_output_file(input_file, quantile, output_md5):
 TEST_PARAMS_URL = [
     ("https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2009-09.csv", 0.9, "93b3d26ed12bac86f50e70b1fe963572"),
     ("https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2014-08.csv", 0.9, "f0716ca12b8ba3551a190fd42e163a14"),
-    ("https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2020-01.csv", 0.9, "cc3be2476b81fd3da2cf438b0af228c0"),
+    ("https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2020-01.csv", 0.9, "d2ead7157e72c7daa3c1e8daa0efed55"),
 ]
 
 
