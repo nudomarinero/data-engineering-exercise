@@ -38,7 +38,7 @@ TEST_PARAMS_URL = [
 
 @pytest.mark.webtest
 @pytest.mark.parametrize("input_file, quantile, output_md5", TEST_PARAMS_URL)
-def test_similar_output_url(input_file, quantile, output_md5):
+def test_similar_output_from_url(input_file, quantile, output_md5):
     out_buffer = StringIO()
     pipeline(input_file, quantile=quantile, output=out_buffer)
     md5 = hashlib.md5(out_buffer.getvalue().encode('utf-8'))
