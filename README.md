@@ -100,6 +100,7 @@ poetry run psrecord "poetry run compute_yellow tests/data/yellow_tripdata_2020-0
 Short term:
 * Check data consistency: The quality of the data is mostly assessed in terms of structure and metadata but the actual data is not investigated for possible inconsistencies. The data types of the columns must be checked. The range of values must be checked as well. The presence of null values (NaNs in our implementation) should be also investigated automatically.
 * Improve storage schema: The latest CSV files are normalized as opposed to the first versions. There are ids for the pickup and dropdown locations instead of coordinates. The coordinate ids could be de-normalized to get the actual coordinates and produce and homogeneous schema.
+* Improve meaningfulness of errors: Errors are currently raised as Python exceptions but they should be made more meaningful for the user. Some additional tests for common errors in data should be added and their exceptions added and handled.
 
 Longer term:
 * Performance improvements: Apart from the improvements mentioned [here](docs/performance.md). In this specific case, one performance improvement could be achieved by moving the computation to the location of the data. The pipeline could be run in AWS in the same region where the data is stored to reduce the data transfer time.
