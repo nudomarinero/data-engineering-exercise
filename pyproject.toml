@@ -6,7 +6,7 @@ authors = ["Jose Sabater <jsm@jsabater.info>"]
 license = "MIT"
 
 packages = [
-    { include = "dataeng.py", from = "src" },
+    { include = "dataeng", from = "src" },
 ]
 
 [tool.poetry.dependencies]

@@ -9,6 +9,7 @@ import click
 import numpy as np
 import requests
 from validators import url
+from .heuristics import FORMAT_IDS
 
 
 # Configure logging
@@ -108,8 +109,16 @@ class Cleaner:
     """Class to clean in a reproducible way the metadata and data"""
     def __init__(self, data):
         self.data = data
-        # Apply cleaning of the header
-        # TODO: Implement
+        # Apply cleaning of the header using heuristics for reproducibility
+        for id_column, header_dict in FORMAT_IDS.items():
+            if id_column in self.data.colnames:
+                self.data = translate_header(data, header_dict)
+
+def translate_header(data, header_dict):
+    """Translate the column names to the FORMAT2014"""
+    for col_orig, col_new in header_dict.items():
+        data.rename_column(col_orig, col_new)
+    return data
 
 # Step 3
 class Compute:
