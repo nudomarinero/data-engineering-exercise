@@ -8,3 +8,8 @@ There is a [description of the data](https://data.cityofnewyork.us/api/views/biw
 
 There are CSV data files for all the months between 2009 and 2021. We check if all of them are listed in the web page with the script `scripts/check_csv_files.py`.
 
+## Data format
+
+Year 2009 files follow a similar schema to later CSVs but with different names in the headers. At some point in time, there are numerical codes substituting strings (as explained in <https://www1.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf>) which should be taken into account to de-normalize the data. Some heuristics can be applied in code to make the name of the columns consistent. An uniform schema is out of scope for this exercise but would be required for a real problem.
+
+The use in the last files of IDs for the locations (PULocationID and DOLocationID) is explained at the end of the user guide.
